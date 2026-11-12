@@ -102,6 +102,7 @@ _BASE_TOOLCHAIN_CONFIGURATION = dict(
     ],
     java_runtime = Label("//toolchains:remotejdk_25"),
     oneversion = Label("//toolchains:one_version"),
+    proguard_allowlister = Label("//toolchains:proguard_allowlister"),
 )
 
 DEFAULT_TOOLCHAIN_CONFIGURATION = _BASE_TOOLCHAIN_CONFIGURATION
