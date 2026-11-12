@@ -1,6 +1,7 @@
 load("@bazel_features//:features.bzl", "bazel_features")
 load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag", "string_setting")
+load("@java_tools//:catalog.bzl", "JAVA_TOOLS_CONFIG")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load(
     ":bootclasspath.bzl",
@@ -227,6 +228,27 @@ cc_library(
         "windows",
     ]
 ]
+
+# Older catalogs keep Bazel's existing allowlister. New catalogs advertise
+# exactly which native archives contain the prebuilt, so partial snapshots
+# do not reference missing targets in the remaining platform archives.
+_ALLOWLISTER_CONDITIONS = {
+    "darwin_arm64": "@bazel_tools//src/conditions:darwin_arm64",
+    "darwin_x86_64": "@bazel_tools//src/conditions:darwin_x86_64",
+    "linux": "@bazel_tools//src/conditions:linux_x86_64",
+    "linux_aarch64": "@bazel_tools//src/conditions:linux_aarch64",
+    "windows": "@bazel_tools//src/conditions:windows",
+}
+
+alias(
+    name = "proguard_allowlister",
+    actual = select({
+        _ALLOWLISTER_CONDITIONS[os]: "@remote_java_tools_%s//:prebuilt_proguard_allowlister" % os
+        for os in JAVA_TOOLS_CONFIG.get("prebuilt_proguard_allowlister_platforms", [])
+    } | {
+        "//conditions:default": "@remote_java_tools//:proguard_allowlister_cc_bin",
+    }) if "prebuilt_proguard_allowlister_platforms" in JAVA_TOOLS_CONFIG else "@bazel_tools//tools/jdk:proguard_whitelister",
+)
 
 alias(
     name = "ijar",
