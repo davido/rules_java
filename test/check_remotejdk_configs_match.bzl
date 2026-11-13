@@ -14,6 +14,6 @@
 
 """Compatibility export of the catalog-owned validation guard."""
 
-load("@java_toolchains//jdk:check_catalog.bzl", _validate_configs = "validate_configs")
+load("@jdk_catalog//jdk:check_catalog.bzl", _validate_configs = "validate_configs")
 
 validate_configs = _validate_configs

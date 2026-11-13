@@ -133,4 +133,4 @@ use_repo(test_repositories, "guava", "other_repo", "truth")
 
 # The catalog split is Bzlmod-only and preserves this revision's default pins.
 bazel_dep(name = "java_tools", version = "22.0")
-bazel_dep(name = "java_toolchains", version = "0.0.2-catalog.1")
+bazel_dep(name = "jdk_catalog", version = "0.0.2-catalog.1")
