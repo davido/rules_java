@@ -19,7 +19,7 @@ package(default_applicable_licenses = ["@rules_java//:license"])
 # Preserve the old maintainer entry point while the catalog owns generation.
 alias(
     name = "dump_remote_jdk_configs",
-    actual = "@java_toolchains//jdk:dump_remote_jdk_configs",
+    actual = "@jdk_catalog//jdk:dump_remote_jdk_configs",
 )
 
 bzl_library(

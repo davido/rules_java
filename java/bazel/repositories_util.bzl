@@ -14,6 +14,6 @@
 
 """Compatibility export; JDK version/URL generation lives with its catalog."""
 
-load("@java_toolchains//jdk:repositories_util.bzl", _FLAT_CONFIGS = "FLAT_CONFIGS")
+load("@jdk_catalog//jdk:repositories_util.bzl", _FLAT_CONFIGS = "FLAT_CONFIGS")
 
 FLAT_CONFIGS = _FLAT_CONFIGS
