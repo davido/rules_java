@@ -16,10 +16,10 @@
 
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("@bazel_tools//tools/build_defs/repo:utils.bzl", "maybe")
-load("@jdk_catalog//jdk:catalog.bzl", _REMOTE_JDK_CONFIGS_LIST = "REMOTE_JDK_CONFIGS_LIST")
 
 # Bzlmod-only catalog dependencies; repository identities stay in this module.
 load("@java_tools//:catalog.bzl", _JAVA_TOOLS_CONFIG = "JAVA_TOOLS_CONFIG")
+load("@jdk_catalog//jdk:catalog.bzl", _REMOTE_JDK_CONFIGS_LIST = "REMOTE_JDK_CONFIGS_LIST")
 load("//toolchains:jdk_build_file.bzl", "JDK_BUILD_TEMPLATE")
 load("//toolchains:local_java_repository.bzl", "local_java_repository")
 load("//toolchains:remote_java_repository.bzl", "remote_java_repository")
