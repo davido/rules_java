@@ -134,3 +134,17 @@ use_repo(test_repositories, "guava", "other_repo", "truth")
 # The catalog split is Bzlmod-only and preserves this revision's default pins.
 bazel_dep(name = "java_tools", version = "22.0")
 bazel_dep(name = "jdk_catalog", version = "0.0.2-catalog.1")
+
+# Standalone fork builds need source pins until the catalogs are in a registry.
+# Consumers select their own catalogs; these root overrides do not propagate.
+git_override(
+    module_name = "java_tools",
+    commit = "c52c8de5b652c86439f0d265efc9fafdc6f2a72f",
+    remote = "https://github.com/davido/java_tools.git",
+)
+
+git_override(
+    module_name = "jdk_catalog",
+    commit = "a9ea6a045107a08fbf4a9e89fbd3f31c69cc0786",
+    remote = "https://github.com/davido/jdk_catalog.git",
+)

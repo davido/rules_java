@@ -1,8 +1,11 @@
-# Automatically perform a release whenever a new "release-like" tag is pushed to the repo.
+# Verify fork snapshots; reserve release and BCR publishing for upstream.
 name: Release
 
 on:
+  workflow_dispatch:
   push:
+    branches:
+    - "catalog-split-head-20261122"
     tags:
     # Detect tags that look like a release.
     - "*.*.*"
@@ -11,7 +14,26 @@ permissions:
   attestations: write
   contents: write
 jobs:
+  verify_fork_snapshot:
+    if: github.repository != 'bazelbuild/rules_java'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      USE_BAZEL_VERSION: "9.3.3"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bazel-contrib/setup-bazel@0.14.0
+      - name: Build snapshot archive
+        run: bazelisk build //distro:all
+      - name: Test Java toolchains and runtimes
+        run: >-
+          bazelisk test
+          //test/java/toolchains:java_toolchain_tests
+          //test/java/toolchains:java_runtime_tests
+          --test_output=errors
   release:
+    if: github.repository == 'bazelbuild/rules_java' && github.ref_type == 'tag'
     uses: bazel-contrib/.github/.github/workflows/release_ruleset.yaml@v7.3.0
     with:
       tag_name: ${{ github.ref_name }}
@@ -21,6 +43,7 @@ jobs:
       release_files: bazel-bin/distro/rules_java-*.tar.gz
       bazel_test_command: "bazel test //test/..."
   publish:
+    if: github.repository == 'bazelbuild/rules_java' && github.ref_type == 'tag'
     needs: release
     uses: ./.github/workflows/publish.yaml
     with:
